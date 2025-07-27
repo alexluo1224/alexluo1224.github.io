@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>进销存管理系统</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.prod.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: "Segoe UI", sans-serif; margin: 0; padding: 0; background: #f0f2f5; }
+    nav { background: #3f51b5; color: white; padding: 10px; display: flex; gap: 10px; }
+    nav button { background: #5c6bc0; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; }
+    nav button:hover { background: #7986cb; }
+    .active { background: #1a237e; }
+    .container { padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+    input, select, button, textarea { margin: 5px 0; padding: 8px; border-radius: 4px; border: 1px solid #ccc; width: 100%; max-width: 300px; box-sizing: border-box; }
+    .summary-table { margin-top: 20px; background-color: #f9f9f9; }
+    .auth-box { max-width: 400px; margin: 80px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .auth-box h2 { margin-top: 0; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div v-if="view==='login'" class="auth-box">
+    <h2>登录 / 注册</h2>
+    <input v-model="email" placeholder="邮箱">
+    <input v-model="password" type="password" placeholder="密码">
+    <button @click="login">登录</button>
+    <button @click="signup">注册</button>
+  </div>
+
+  <template v-else>
+    <nav>
+      <button :class="{active: view==='entry'}" @click="view='entry'">入库</button>
+      <button :class="{active: view==='exit'}" @click="view='exit'">出库</button>
+      <button :class="{active: view==='inventory'}" @click="view='inventory'">库存盘点</button>
+      <button :class="{active: view==='records'}" @click="view='records'">出入库记录</button>
+      <button :class="{active: view==='products'}" @click="view='products'">示例商品</button>
+      <button style="margin-left:auto;" @click="logout">退出登录</button>
+    </nav>
+    <div class="container">
+      <component :is="view" :products="products" :records="records" />
+    </div>
+  </template>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
